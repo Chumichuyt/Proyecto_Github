@@ -7,6 +7,7 @@ class Cancha:
         self.lista_reservas = []
         self.lista_empleados = []
 
+    @staticmethod
     def crear_cancha(self):
         """
             Método que crea una cancha con los datos introducidos por el usuario
@@ -20,7 +21,8 @@ class Cancha:
             
         except ValueError as Err:
             print("Error" + Err)
-    
+
+    @staticmethod
     def agregar_cancha(self, centro): #Revisar en implementación de centroX.py
         """
             Método que agrega una cancha a la lista de canchas del centro.
@@ -34,6 +36,7 @@ class Cancha:
         else:
             print("La cancha ya está registrada en el centro.")
 
+    @staticmethod
     def mostrar_deportes_disponibles(self, centro:object, deportes_disponibles:list):
         """
             Método que muestra los deportes disponibles para jugar en la cancha.
@@ -49,6 +52,7 @@ class Cancha:
         for deporte in deportes_disponibles:
             print(deporte)
 
+    @staticmethod
     def mostrar_canchas_para_deporte(self, deporte, centro:object):
         """
             Método que muestra las canchas disponibles para un deporte en particular.
@@ -62,8 +66,13 @@ class Cancha:
             if cancha.deporte == deporte:
                 print(f"{i}. Número de cancha: {cancha.numero_cancha}")
 
+    @staticmethod
     def quitar_cancha(self, centro):
-        
+        """
+        Metodo que elimina una cancha de la lista de canchas del centro.
+        -self: instancia de la clase Cancha
+        -centro: instancia de la clase Centro
+        """
         if self in centro.lista_canchas: #Controlar si la cancha esta registrada en el centro
             if self.lista_reservas == []: # Controlar si la cancha tiene reservas pendientes
                 centro.lista_canchas.remove(self)
