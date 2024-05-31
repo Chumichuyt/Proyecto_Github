@@ -5,7 +5,6 @@ class Reserva:
         self.cliente = cliente
         self.cancha = cancha
 
-    @staticmethod
     def crear_reserva(numero_reserva, fecha, cliente, cancha, lista_reservas):
         
         # Verificar si la cancha está habilitada
@@ -15,6 +14,8 @@ class Reserva:
         
         # Verificar si el cliente está habilitado
             # Y saldo negativo no menor a -2000
+            # Pendiente de implementar con módulo persona.py
+            
         if not Reserva.cliente_habilitado(cliente, lista_reservas): 
             print("El cliente no está habilitado.")
             return None
@@ -45,7 +46,6 @@ class Reserva:
                 return False
         return True
 
-    @staticmethod
     def listar_reservas_cancha(cancha, lista_reservas):
         """
             Método para mostrar las reservas de una cancha.
@@ -55,7 +55,6 @@ class Reserva:
             if reserva.cancha == cancha:
                 print(f"Número de reserva: {reserva.numero_reserva}, Fecha: {reserva.fecha}, Cliente: {reserva.cliente.nombre}")
 
-    @staticmethod
     def listar_reservas_cliente(cliente, lista_reservas):
         """
             Método para mostrar las reservas de un cliente.
@@ -64,4 +63,7 @@ class Reserva:
         for reserva in lista_reservas:
             if reserva.cliente == cliente:
                 print(f"Número de reserva: {reserva.numero_reserva}, Fecha: {reserva.fecha}, Cancha: {reserva.cancha.numero_cancha}")
+
+    def __str__(self):
+        return f"Reserva: {self.numero_reserva}, Fecha: {self.fecha}, Cliente: {self.cliente}, Cancha: {self.cancha}"
     
