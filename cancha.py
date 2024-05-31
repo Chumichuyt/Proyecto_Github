@@ -22,7 +22,6 @@ class Cancha:
         except ValueError as Err:
             print("Error" + Err)
 
-    @staticmethod
     def agregar_cancha(self, centro): #Revisar en implementación de centroX.py
         """
             Método que agrega una cancha a la lista de canchas del centro.
@@ -66,7 +65,6 @@ class Cancha:
             if cancha.deporte == deporte:
                 print(f"{i}. Número de cancha: {cancha.numero_cancha}")
 
-    @staticmethod
     def quitar_cancha(self, centro):
         """
         Metodo que elimina una cancha de la lista de canchas del centro.
