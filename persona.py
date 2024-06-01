@@ -1,3 +1,5 @@
+from cancha import Cancha
+
 class Cliente:
     def __init__(self, nombre=None, apellido=None, telefono=None, identificador=None, activo=True):
         self.nombre = nombre
@@ -72,3 +74,92 @@ class Cliente:
 
     def __str__(self):
         return f"Nombre: {self.nombre}, Apellido: {self.apellido}, Teléfono: {self.telefono}, Identificador: {self.identificador}, Activo: {self.activo}"
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Empleado:
+    def __init__(self, nombre=None, apellido=None):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.desocupado = True
+        self.lista_tareas = []
+        self.cancha_asignada = None
+
+    @staticmethod
+    def crear_empleado():
+        """
+        Método que crea un empleado con los datos introducidos por el usuario.
+        """
+        try:
+            nombre = input("Ingresa el nombre del empleado: ")
+            apellido = input("Ingresa el apellido del empleado: ")
+            return Empleado(nombre, apellido)
+        except ValueError as Err:
+            print("Error: " + str(Err))
+
+    def registrar_en_cancha(self, cancha):
+        """
+        Método que registra un empleado a una cancha.
+        Para esto la cancha debe estar habilitada y el empleado no debe estar registrado en ninguna otra cancha.
+        - self: instancia de la clase Empleado
+        - cancha: instancia de la clase Cancha
+        """
+        if cancha.habilitada and self.cancha_asignada is None:
+            cancha.lista_empleados.append(self)
+            self.cancha_asignada = cancha
+            self.desocupado = False
+            print(f"Empleado {self.nombre} {self.apellido} registrado en la cancha {cancha.numero_cancha}.")
+        else:
+            print("No se puede registrar el empleado. La cancha no está habilitada o el empleado ya está asignado a otra cancha.")
+
+    def asignar_tarea(self, tarea):
+        """
+        Método que asigna una tarea al empleado.
+        - self: instancia de la clase Empleado
+        - tarea: tarea a asignar (cadena de texto)
+        """
+        self.lista_tareas.append(tarea)
+        self.desocupado = False
+        print(f"Tarea '{tarea}' asignada a {self.nombre} {self.apellido}.")
+
+    def quitar_tarea(self, tarea):
+        """
+        Método que quita una tarea del empleado.
+        - self: instancia de la clase Empleado
+        - tarea: tarea a quitar (cadena de texto)
+        """
+        if tarea in self.lista_tareas:
+            self.lista_tareas.remove(tarea)
+            if not self.lista_tareas:
+                self.desocupado = True
+            print(f"Tarea '{tarea}' quitada a {self.nombre} {self.apellido}.")
+        else:
+            print(f"La tarea '{tarea}' no está asignada al empleado {self.nombre} {self.apellido}.")
+
+    def quitar_de_cancha(self, cancha):
+        """
+        Método que quita un empleado de la cancha.
+        - self: instancia de la clase Empleado
+        - cancha: instancia de la clase Cancha
+        """
+        if self in cancha.lista_empleados:
+            cancha.lista_empleados.remove(self)
+            self.cancha_asignada = None
+            if not self.lista_tareas:
+                self.desocupado = True
+            print(f"Empleado {self.nombre} {self.apellido} quitado de la cancha {cancha.numero_cancha}.")
+        else:
+            print(f"El empleado {self.nombre} {self.apellido} no está registrado en la cancha {cancha.numero_cancha}.")
+
+    @staticmethod
+    def listar_empleados_desocupados(centro):
+        """
+        Método que lista los empleados desocupados del centro.
+        - centro: instancia de la clase Centro
+        """
+        print("Empleados desocupados:")
+        for empleado in centro.lista_empleados:
+            if empleado.desocupado:
+                print(f"Nombre: {empleado.nombre}, Apellido: {empleado.apellido}")
+
+    def __str__(self):
+        return f"Nombre: {self.nombre}, Apellido: {self.apellido}, Desocupado: {self.desocupado}, Cancha Asignada: {self.cancha_asignada.numero_cancha if self.cancha_asignada else 'Ninguna'}"
