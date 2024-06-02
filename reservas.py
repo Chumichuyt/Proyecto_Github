@@ -27,7 +27,7 @@ class Reserva:
         return reserva
     
     @staticmethod
-    def cliente_habilitado(self, cliente, lista_reservas):
+    def cliente_habilitado(cliente, lista_reservas):
         """
             Método para comprobar si un cliente está habilitado.
         """
@@ -46,6 +46,7 @@ class Reserva:
                 return False
         return True
 
+    @staticmethod
     def listar_reservas_cancha(cancha, lista_reservas):
         """
             Método para mostrar las reservas de una cancha.
@@ -55,6 +56,7 @@ class Reserva:
             if reserva.cancha == cancha:
                 print(f"Número de reserva: {reserva.numero_reserva}, Fecha: {reserva.fecha}, Cliente: {reserva.cliente.nombre}")
 
+    @staticmethod
     def listar_reservas_cliente(cliente, lista_reservas):
         """
             Método para mostrar las reservas de un cliente.
