@@ -30,8 +30,8 @@ class Cliente:
         - self: instancia de la clase Cliente
         - centro: instancia de la clase Centro
         """
-        if self not in centro.lista_clientes:
-            centro.lista_clientes.append(self)
+        if self not in centro.clientes:
+            centro.clientes.append(self)
             print("Cliente agregado al centro exitosamente.")
         else:
             print("El cliente ya está registrado en el centro.")
@@ -43,9 +43,9 @@ class Cliente:
         - self: instancia de la clase Cliente
         - centro: instancia de la clase Centro
         """
-        if self in centro.lista_clientes:
+        if self in centro.clientes:
             if not self.tiene_reservas_pendientes(centro):
-                centro.lista_clientes.remove(self)
+                centro.clientes.remove(self)
                 print("Cliente eliminado del centro exitosamente.")
             else:
                 print("El cliente no se puede eliminar porque tiene reservas pendientes.")
@@ -58,7 +58,7 @@ class Cliente:
         - self: instancia de la clase Cliente
         - centro: instancia de la clase Centro
         """
-        for reserva in centro.lista_reservas:
+        for reserva in centro.reservas:
             if reserva.cliente == self and reserva.activa:
                 return True
         return False
@@ -90,7 +90,7 @@ class Cliente:
         - centro: instancia de la clase Centro
         """
         print("Clientes morosos:")
-        for cliente in centro.lista_clientes:
+        for cliente in centro.clientes:
             if cliente.activo is False:
                 print(f"Nombre: {cliente.nombre}, Apellido: {cliente.apellido}")
 
@@ -179,7 +179,7 @@ class Empleado:
         - centro: instancia de la clase Centro
         """
         print("Empleados desocupados:")
-        for empleado in centro.lista_empleados:
+        for empleado in centro.empleados:
             if empleado.desocupado:
                 print(f"Nombre: {empleado.nombre}, Apellido: {empleado.apellido}")
 
