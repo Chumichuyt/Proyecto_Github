@@ -10,7 +10,8 @@ class Centro:
         self.clientes = []
         self.reservas = []
         self.empleados = []
-
+        self.canchas_creadas = []
+        
     def main_menu(self):
         """
         Menú principal del centro.
@@ -55,21 +56,33 @@ class Centro:
             if opcion == 'a':
                 cancha = Cancha()
                 cancha.crear_cancha()
-
+                self.canchas_creadas.append(cancha)
+                
             elif opcion == 'b':
-                if hasattr(cancha, 'numero_cancha'):
-                    cancha.agregar_cancha(self)
-                    print("Cancha agregada al centro.")
+                for i, cancha in enumerate(self.canchas_creadas, start=1):
+                    print(f"{i}. Número de cancha: {cancha.numero_cancha}")
+                    
+                numero_cancha = input("Ingrese el número de cancha a agregar: ")
+                cancha_a_agregar = next((c for c in self.canchas_creadas if c.numero_cancha == numero_cancha), None)
+
+                if cancha_a_agregar:     
+                    cancha_a_agregar.agregar_cancha(self)
+                    
                 else:
-                    print("Debe crear una cancha primero.")
+                    print("Cancha no encontrada.")
+
 
             elif opcion == 'c':
                 deporte = input("Ingrese el deporte: ")
                 Cancha.mostrar_canchas_para_deporte(deporte, self)
 
             elif opcion == 'd':
+                for i, cancha in enumerate(self.canchas, start=1):
+                    print(f"{i}. Número de cancha: {cancha.numero_cancha}")
+                    
                 numero_cancha = input("Ingrese el número de cancha a eliminar: ")
                 cancha_a_eliminar = next((c for c in self.canchas if c.numero_cancha == numero_cancha), None)
+                
                 if cancha_a_eliminar:
                     cancha_a_eliminar.quitar_cancha(self)
                 else:
@@ -233,8 +246,8 @@ class Centro:
             elif opcion == 'd': # Listar todos los empleados
                 if self.empleados:
                     print("Empleados del centro:")
-                    for empleado in self.empleados:
-                        print(f"Nombre: {empleado.nombre}, ID: {empleado.id}")
+                    for i, empleado in enumerate (self.empleados, start=1): 
+                        print(f"{i}.Nombre: {empleado.nombre}")
                 else:
                     print("No hay empleados en el centro.")
 
@@ -261,6 +274,50 @@ class Centro:
                     return None
                 elif 1 <= seleccion <= len(self.clientes):
                     return self.clientes[seleccion - 1]
+                else:
+                    print("Opción inválida. Intente de nuevo.")
+            except ValueError:
+                print("Opción inválida. Intente de nuevo.")
+                
+    def seleccionar_cancha(self):
+        """
+        Selecciona una cancha de la lista de canchas.
+        """
+        if not self.canchas:
+            print("No hay canchas disponibles.")
+            return None
+        print("Canchas disponibles:")
+        for i, cancha in enumerate(self.canchas, start=1):
+            print(f"{i}. {cancha}")
+        while True:
+            try:
+                seleccion = int(input("Seleccione una cancha (0 para cancelar): "))
+                if seleccion == 0:
+                    return None
+                elif 1 <= seleccion <= len(self.canchas):
+                    return self.canchas[seleccion - 1]
+                else:
+                    print("Opción inválida. Intente de nuevo.")
+            except ValueError:
+                print("Opción inválida. Intente de nuevo.")
+                
+    def seleccionar_empleado(self):
+        """
+        Selecciona un empleado de la lista de empleados.
+        """
+        if not self.empleados:
+            print("No hay empleados disponibles.")
+            return None
+        print("Empleados disponibles:")
+        for i, empleado in enumerate(self.empleados, start=1):
+            print(f"{i}. {empleado}")
+        while True:
+            try:
+                seleccion = int(input("Seleccione un empleado (0 para cancelar): "))
+                if seleccion == 0:
+                    return None
+                elif 1 <= seleccion <= len(self.empleados):
+                    return self.empleados[seleccion - 1]
                 else:
                     print("Opción inválida. Intente de nuevo.")
             except ValueError:
