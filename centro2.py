@@ -138,12 +138,8 @@ class Centro:
                     print("Cliente no encontrado.")
 
             elif opcion == 'd': # Listar reservas por nº de reserva
-                numero_reserva = input("Ingrese el número de reserva: ")
-                reserva = next((reserva for reserva in self.reservas if reserva.numero_reserva == numero_reserva), None)
-                if reserva:
-                    print(f"Reserva encontrada: {reserva}")
-                else:
-                    print("Reserva no encontrada.")
+                pass
+                print("funcion que implementa Alvaro")
 
             elif opcion == 'e': # Volver al menú principal
                 break
@@ -164,11 +160,105 @@ class Centro:
             print("e. Volver al menú principal")
 
             opcion = input("Seleccione una opción: ")
-
+            
             if opcion == 'a': # Crear un cliente
                 cliente = Cliente.crear_cliente()
                 if cliente:
                     self.clientes.append(cliente)
+
+            elif opcion == 'b': # Agregar un cliente al centro
+                cliente = self.seleccionar_cliente()
+                if cliente:
+                    self.clientes.append(cliente)
+                    print(f"Cliente {cliente.nombre} agregado al centro.")
+
+            elif opcion == 'c': # Quitar un cliente del centro
+                cliente = self.seleccionar_cliente()
+                if cliente in self.clientes:
+                    self.clientes.remove(cliente)
+                    print(f"Cliente {cliente.nombre} removido del centro.")
+
+            elif opcion == 'd': # Listar clientes morosos
+                clientes_morosos = [cliente for cliente in self.clientes if cliente.saldo < 0]
+                if clientes_morosos:
+                    print("Clientes morosos:")
+                    for cliente in clientes_morosos:
+                        print(f"Nombre: {cliente.nombre}, Saldo: {cliente.saldo}")
+                else:
+                    print("No hay clientes morosos.")
+
+            elif opcion == 'e': # Volver al menú principal
+                break
+
+            else:
+                print("Opción inválida.")
+
+    def submenu_empleados(self):
+        """
+        Submenú para gestionar las operaciones con empleados en el menú principal.
+        """
+        while True:
+            print("\n--- Gestionar Empleados ---")
+            print("a. Crear un empleado")
+            print("b. Agregar un empleado al centro")
+            print("c. Quitar un empleado del centro")
+            print("d. Listar todos los empleados")
+            print("e. Volver al menú principal")
+
+            opcion = input("Seleccione una opción: ")
+
+            if opcion == 'a': # Crear un empleado
+                empleado = Empleado.crear_empleado()
+                if empleado:
+                    self.empleados.append(empleado)
+
+            elif opcion == 'b': # Agregar un empleado al centro
+                empleado = self.seleccionar_empleado()
+                if empleado:
+                    self.empleados.append(empleado)
+                    print(f"Empleado {empleado.nombre} agregado al centro.")
+
+            elif opcion == 'c': # Quitar un empleado del centro
+                empleado = self.seleccionar_empleado()
+                if empleado in self.empleados:
+                    self.empleados.remove(empleado)
+                    print(f"Empleado {empleado.nombre} removido del centro.")
+
+            elif opcion == 'd': # Listar todos los empleados
+                if self.empleados:
+                    print("Empleados del centro:")
+                    for empleado in self.empleados:
+                        print(f"Nombre: {empleado.nombre}, ID: {empleado.id}")
+                else:
+                    print("No hay empleados en el centro.")
+
+            elif opcion == 'e': # Volver al menú principal
+                break
+
+            else:
+                print("Opción inválida.")
+
+    def seleccionar_cliente(self):
+        """
+        Selecciona un cliente de la lista de clientes.
+        """
+        if not self.clientes:
+            print("No hay clientes disponibles.")
+            return None
+        print("Clientes disponibles:")
+        for i, cliente in enumerate(self.clientes, start=1):
+            print(f"{i}. {cliente}")
+        while True:
+            try:
+                seleccion = int(input("Seleccione un cliente (0 para cancelar): "))
+                if seleccion == 0:
+                    return None
+                elif 1 <= seleccion <= len(self.clientes):
+                    return self.clientes[seleccion - 1]
+                else:
+                    print("Opción inválida. Intente de nuevo.")
+            except ValueError:
+                print("Opción inválida. Intente de nuevo.")
 
 
 centro_deportivo = Centro("Centro Deportivo XYZ", "Calle Principal 123")
