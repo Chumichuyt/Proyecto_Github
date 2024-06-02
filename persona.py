@@ -7,6 +7,8 @@ class Cliente:
         self.telefono = telefono
         self.identificador = identificador
         self.activo = activo
+        self.saldo = 0
+        self.movimientos = []
 
     @staticmethod
     def crear_cliente():
@@ -61,6 +63,26 @@ class Cliente:
                 return True
         return False
 
+    def registrar_pago(self, monto):
+        """
+        Registra un pago del cliente y actualiza su saldo.
+        """
+        if monto > 0:
+            self.saldo += monto
+            self.movimientos.append(("Pago", monto))  # Registrar el movimiento
+            print(f"Pago de {monto} registrado. Nuevo saldo: {self.saldo}")
+        else:
+            print("El monto del pago debe ser positivo.")
+            
+    def mostrar_saldo(self):
+        """
+        Muestra el saldo actual del cliente y sus movimientos.
+        """
+        print(f"Saldo actual: {self.saldo}")
+        print("\nMovimientos:")
+        for tipo, monto in self.movimientos:
+            print(f"- {tipo}: {monto}")
+    
     @staticmethod
     def listar_clientes_morosos(centro):
         """
