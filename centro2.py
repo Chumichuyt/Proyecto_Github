@@ -138,8 +138,14 @@ class Centro:
                     print("Cliente no encontrado.")
 
             elif opcion == 'd': # Listar reservas por nº de reserva
-                pass
-                print("funcion que implementa Alvaro")
+                
+                # FUNCIÓN IMPLEMENTADA POR ALUMNO 1 EN EL CENTRO DEL ALUMNO 2.
+                numero_reserva = input("Ingrese el número de reserva: ")
+                reserva = next((reserva for reserva in self.reservas if reserva.numero_reserva == numero_reserva), None)
+                if reserva:
+                    print(f"Reserva encontrada: {reserva}")
+                else:
+                    print("Reserva no encontrada.")
 
             elif opcion == 'e': # Volver al menú principal
                 break
