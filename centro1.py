@@ -14,7 +14,11 @@ class Centro:
         self.direccion = direccion
         self.canchas = []
         self.clientes = []
+        self.empleados = []
         self.reservas = []
+        self.canchas_creadas = []
+        self.clientes_creados = []
+        self.empleados_creados = []
 
     def main_menu(self):
         while True:
@@ -28,13 +32,13 @@ class Centro:
             opcion = input("Seleccione una opción: ")
 
             if opcion == '1':
-                self.gestionar_canchas()
+                self.submenu_canchas()
             elif opcion == '2':
-                self.gestionar_clientes()
+                self.submenu_clientes()
             elif opcion == '3':
-                self.gestionar_empleados()
+                self.submenu_empleados()
             elif opcion == '4':
-                self.gestionar_reservas()
+                self.submenu_reservas()
             elif opcion == '5':
                 break
             else:
@@ -42,7 +46,7 @@ class Centro:
 
     def submenu_canchas(self):
         """
-            Sumbmenu para gestionar las operaciones con canchas en el menú principal
+        Submenú para gestionar las operaciones con canchas en el menú principal.
         """
         while True:
             print("\n--- Gestionar Canchas ---")
@@ -57,36 +61,40 @@ class Centro:
             if opcion == 'a':
                 cancha = Cancha()
                 cancha.crear_cancha()
+                self.canchas_creadas.append(cancha)
                 
             elif opcion == 'b':
-                if hasattr(cancha, 'numero_cancha'):  # Verificar si se creó una cancha
-                    cancha.agregar_cancha(self)
-                    print("Cancha agregada al centro.")
-                else:
-                    print("Debe crear una cancha primero.")
+                for i, cancha in enumerate(self.canchas_creadas, start=1):
+                    print(f"{i}. Número de cancha: {cancha.numero_cancha}")
                     
+                numero_cancha = input("Ingrese el número de cancha a agregar: ")
+                cancha_a_agregar = next((c for c in self.canchas_creadas if c.numero_cancha == numero_cancha), None)
+
+                if cancha_a_agregar:     
+                    cancha_a_agregar.agregar_cancha(self)
+                    
+                else:
+                    print("Cancha no encontrada.")
+
             elif opcion == 'c':
                 deporte = input("Ingrese el deporte: ")
                 Cancha.mostrar_canchas_para_deporte(deporte, self)
-                
+
             elif opcion == 'd':
-                
-                numero_cancha = input("Ingrese el número de cancha a eliminar: ")
-                cancha_a_eliminar = None
-                
-                for cancha in self.canchas:
-                    if cancha.numero_cancha == numero_cancha:
-                        cancha_a_eliminar = cancha
-                        break
+                for i, cancha in enumerate(self.canchas, start=1):
+                    print(f"{i}. Número de cancha: {cancha.numero_cancha}")
                     
+                numero_cancha = input("Ingrese el número de cancha a eliminar: ")
+                cancha_a_eliminar = next((c for c in self.canchas if c.numero_cancha == numero_cancha), None)
+                
                 if cancha_a_eliminar:
                     cancha_a_eliminar.quitar_cancha(self)
                 else:
                     print("Cancha no encontrada.")
-                    
+
             elif opcion == 'e':
                 break
-            
+
             else:
                 print("Opción inválida.")
 
@@ -212,26 +220,35 @@ class Centro:
 
             if opcion == 'a':
                 cliente = Cliente.crear_cliente()
+                self.clientes_creados.append(cliente)
+                
             elif opcion == 'b':
-                if hasattr(cliente, 'identificador'):  # Verificar si se creó un cliente
-                    cliente.agregar_cliente(self)
-                else:
-                    print("Debe crear un cliente primero.")
+                for i, cliente in enumerate(self.clientes_creados, start=1):
+                    print(f"{i}. Nombre: {cliente.nombre}, ID: {cliente.identificador}")
+                    
+                identificador = input("Ingrese el identificador del cliente: ")
+    
+                cliente_add = next((c for c in self.clientes_creados if cliente.identificador == identificador), None)
+                cliente_add.agregar_cliente(self)
+
+                    
             elif opcion == 'c':
-                identificador_cliente = input("Ingrese el identificador del cliente a eliminar: ")
-                cliente_a_eliminar = None
-                for cliente in self.clientes:
-                    if cliente.identificador == identificador_cliente:
-                        cliente_a_eliminar = cliente
-                        break
+                for i, cliente in enumerate(self.clientes, start=1):
+                    print(f"{i}. Nombre: {cliente.nombre}, ID: {cliente.identificador}")
+                    
+                identificador = input("Ingrese el identificador del cliente a eliminar: ")
+                cliente_a_eliminar = next((c for c in self.clientes if cliente.identificador == identificador), None)
+
                 if cliente_a_eliminar:
                     cliente_a_eliminar.quitar_cliente(self)
                 else:
                     print("Cliente no encontrado.")
+                    
             elif opcion == 'd':
                 # FUNCIÓN QUE IMPLEMENTA EL ALUMNO2 (MANU)
                 # LISTAR CLIENTES MOROSOS
                 print("Funcionalidad a implementar por Alumno2.")
+                
             elif opcion == 'e':
                 break
             else:
@@ -278,6 +295,9 @@ class Centro:
                     print("Debe haber al menos un empleado desocupado y una cancha para registrarlo.")
 
             elif opcion == 'c':# Asignar tarea a un empleado
+                for i, empleado in enumerate(self.empleados, start=1):
+                    print(f"{i}. Nombre: {empleado.nombre}, Apellido: {empleado.apellido}")
+                    
                 nombre_empleado = input("Ingrese el nombre del empleado: ")
                 apellido_empleado = input("Ingrese el apellido del empleado: ")
                 empleado = next((emp for emp in self.empleados if emp.nombre == nombre_empleado and emp.apellido == apellido_empleado), None)
@@ -289,6 +309,9 @@ class Centro:
                     print("Empleado no encontrado.")
 
             elif opcion == 'd': # Quitar tarea de un empleado
+                for i, empleado in enumerate(self.empleados, start=1):
+                    print(f"{i}. Nombre: {empleado.nombre}, Apellido: {empleado.apellido}, Tareas Asignadas: {empleado.lista_tareas}")
+                
                 nombre_empleado = input("Ingrese el nombre del empleado: ")
                 apellido_empleado = input("Ingrese el apellido del empleado: ")
                 empleado = next((emp for emp in self.empleados if emp.nombre == nombre_empleado and emp.apellido == apellido_empleado), None)
@@ -303,6 +326,9 @@ class Centro:
                 Empleado.listar_empleados_desocupados(self)
 
             elif opcion == 'f':# Quitar un empleado de la cancha
+                for i, empleado in enumerate(self.empleados, start=1):
+                    print(f"{i}. Nombre: {empleado.nombre}, Apellido: {empleado.apellido}, Cancha Asignada: {empleado.cancha_asignada}")
+                    
                 nombre_empleado = input("Ingrese el nombre del empleado: ")
                 apellido_empleado = input("Ingrese el apellido del empleado: ")
                 empleado = next((emp for emp in self.empleados if emp.nombre == nombre_empleado and emp.apellido == apellido_empleado), None)
