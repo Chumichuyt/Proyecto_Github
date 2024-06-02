@@ -7,7 +7,6 @@ class Cancha:
         self.lista_reservas = []
         self.lista_empleados = []
 
-    @staticmethod
     def crear_cancha(self):
         """
             Método que crea una cancha con los datos introducidos por el usuario
@@ -22,29 +21,26 @@ class Cancha:
         except ValueError as Err:
             print("Error" + Err)
 
-    def agregar_cancha(self, centro): #Revisar en implementación de centroX.py
-        """
+    def agregar_cancha(self, centro):
+            """
             Método que agrega una cancha a la lista de canchas del centro.
-            -self: instancia de la clase Cancha
-            -centro: instancia de la clase Centro
-        """
-        
-        if self not in centro.lista_canchas:
-            centro.lista_canchas.append(self)
-            print("Cancha agregada al centro exitosamente.")
-        else:
-            print("La cancha ya está registrada en el centro.")
+            - self: instancia de la clase Cancha.
+            - centro: instancia de la clase Centro.
+            """
+            if self not in centro.canchas:
+                centro.canchas.append(self)
+                print("Cancha agregada al centro exitosamente.")
+            else:
+                print("La cancha ya está registrada en el centro.")
 
-    @staticmethod
-    def mostrar_deportes_disponibles(self, centro:object, deportes_disponibles:list):
+    def mostrar_deportes_disponibles(self, centro):
         """
-            Método que muestra los deportes disponibles para jugar en la cancha.
-            -centro : Instancia de la clase Centro
-            -deportes_disponibles : Lista de deportes disponibles para jugar. Se inicializa en el programa principal.
+        Método que muestra los deportes disponibles para jugar en la cancha.
+        - centro: Instancia de la clase Centro.
         """
-        
+        deportes_disponibles = []
         print("Deportes disponibles:")
-        for cancha in centro.lista_canchas:
+        for cancha in centro.canchas:
             if cancha.deporte not in deportes_disponibles:
                 deportes_disponibles.append(cancha.deporte)
         
@@ -52,28 +48,27 @@ class Cancha:
             print(deporte)
 
     @staticmethod
-    def mostrar_canchas_para_deporte(self, deporte, centro:object):
+    def mostrar_canchas_para_deporte(deporte, centro):
         """
-            Método que muestra las canchas disponibles para un deporte en particular.
-            -self: Instancia de la clase Cancha.
-            -deporte: Deporte de las canchas que se van a mostrar.
-            -centro: Instancia de la clase Centro.
+        Método que muestra las canchas disponibles para un deporte en particular.
+        - deporte: Deporte de las canchas que se van a mostrar.
+        - centro: Instancia de la clase Centro.
         """
         
         print(f"Canchas disponibles para {deporte}:")
-        for i, cancha in enumerate(centro.lista_canchas, start=1):
+        for i, cancha in enumerate(centro.canchas, start=1):
             if cancha.deporte == deporte:
                 print(f"{i}. Número de cancha: {cancha.numero_cancha}")
 
     def quitar_cancha(self, centro):
         """
-        Metodo que elimina una cancha de la lista de canchas del centro.
-        -self: instancia de la clase Cancha
-        -centro: instancia de la clase Centro
+        Método que elimina una cancha de la lista de canchas del centro.
+        - self: instancia de la clase Cancha.
+        - centro: instancia de la clase Centro.
         """
-        if self in centro.lista_canchas: #Controlar si la cancha esta registrada en el centro
-            if self.lista_reservas == []: # Controlar si la cancha tiene reservas pendientes
-                centro.lista_canchas.remove(self)
+        if self in centro.canchas:
+            if not self.lista_reservas:
+                centro.canchas.remove(self)
                 print("Cancha eliminada del centro exitosamente.")
             else:
                 print("La cancha no se puede eliminar porque tiene reservas pendientes.")
@@ -82,4 +77,4 @@ class Cancha:
 
     def __str__(self):
         return f"Número de cancha: {self.numero_cancha}, deporte: {self.deporte}, precio: {self.precio}, Disponible: {self.habilitada}"
-    
+
