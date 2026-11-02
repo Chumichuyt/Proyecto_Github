@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Mancuerna -->
+    <group android:rotation="-30" android:pivotX="54" android:pivotY="54">
+        <path android:fillColor="#FFFF7A1A" android:pathData="M28,40h8a2,2 0,0 1,2 2v24a2,2 0,0 1,-2 2h-8a2,2 0,0 1,-2 -2v-24a2,2 0,0 1,2 -2z" />
+        <path android:fillColor="#FFFF7A1A" android:pathData="M72,40h8a2,2 0,0 1,2 2v24a2,2 0,0 1,-2 2h-8a2,2 0,0 1,-2 -2v-24a2,2 0,0 1,2 -2z" />
+        <path android:fillColor="#FFFFB27A" android:pathData="M20,45h5a1.5,1.5 0,0 1,1.5 1.5v15a1.5,1.5 0,0 1,-1.5 1.5h-5a1.5,1.5 0,0 1,-1.5 -1.5v-15a1.5,1.5 0,0 1,1.5 -1.5z" />
+        <path android:fillColor="#FFFFB27A" android:pathData="M83,45h5a1.5,1.5 0,0 1,1.5 1.5v15a1.5,1.5 0,0 1,-1.5 1.5h-5a1.5,1.5 0,0 1,-1.5 -1.5v-15a1.5,1.5 0,0 1,1.5 -1.5z" />
+        <path android:fillColor="#FFECECEC" android:pathData="M38,51h32v6h-32z" />
+    </group>
+</vector>
