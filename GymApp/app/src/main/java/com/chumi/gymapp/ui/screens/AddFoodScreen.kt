@@ -209,7 +209,11 @@ private fun FoodAmountDialog(food: Food, initialGrams: Double, onAdd: (Double) -
                 Spacer(Modifier.height(8.dp))
                 Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     listOf(1.0, 2.0, 0.5).forEach { n ->
-                        val label = (if (n == 0.5) "½" else formatWeight(n)) + " ${food.servingName} (${formatWeight(food.servingG * n)} g)"
+                        val label = when (n) {
+                            1.0 -> "1 ${food.servingName}"
+                            0.5 -> "½ ${food.servingName}"
+                            else -> "×${formatWeight(n)}"
+                        } + " (${formatWeight(food.servingG * n)} g)"
                         FilterChip(false, { grams = food.servingG * n; fieldKey++ }, label = { Text(label) })
                     }
                     FilterChip(false, { grams = 100.0; fieldKey++ }, label = { Text("100 g") })

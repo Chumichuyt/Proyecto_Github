@@ -131,3 +131,6 @@ fun formatKg(kg: Double): String {
 
 fun formatWeight(kg: Double): String =
     if (kg % 1.0 == 0.0) kg.toLong().toString() else "%.2f".format(kg).trimEnd('0').trimEnd('.', ',').replace('.', ',')
+
+/** Calorías siempre sin decimales: "1.250". */
+fun formatKcal(kcal: Double): String = formatKg(Math.round(kcal).toDouble())

@@ -58,6 +58,7 @@ import com.chumi.gymapp.data.FoodEntry
 import com.chumi.gymapp.data.Meal
 import com.chumi.gymapp.data.Nutrition
 import com.chumi.gymapp.data.NutritionContent
+import com.chumi.gymapp.data.formatKcal
 import com.chumi.gymapp.data.formatKg
 import com.chumi.gymapp.data.formatWeight
 import com.chumi.gymapp.ui.AppViewModel
@@ -155,7 +156,7 @@ fun NutritionScreen(vm: AppViewModel, nav: NavHostController) {
                     Spacer(Modifier.height(10.dp))
                     Row {
                         Text(
-                            "Comido: ${formatKg(totals.kcal)} kcal" + (targets?.let { " de ${formatKg(it.kcal.toDouble())}" } ?: ""),
+                            "Comido: ${formatKcal(totals.kcal)} kcal" + (targets?.let { " de ${formatKcal(it.kcal.toDouble())}" } ?: ""),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.weight(1f),
@@ -283,7 +284,7 @@ fun NutritionScreen(vm: AppViewModel, nav: NavHostController) {
 private fun MealCard(meal: Meal, entries: List<FoodEntry>, onAdd: () -> Unit, onEntry: (FoodEntry) -> Unit) {
     val kcal = entries.sumOf { it.kcal }
     SectionCard(
-        title = "${meal.emoji} ${meal.label}" + if (entries.isNotEmpty()) " · ${formatKg(kcal)} kcal" else "",
+        title = "${meal.emoji} ${meal.label}" + if (entries.isNotEmpty()) " · ${formatKcal(kcal)} kcal" else "",
         action = { IconButton(onClick = onAdd) { Icon(Icons.Default.Add, "Añadir a ${meal.label}", tint = MaterialTheme.colorScheme.primary) } },
     ) {
         if (entries.isEmpty()) {

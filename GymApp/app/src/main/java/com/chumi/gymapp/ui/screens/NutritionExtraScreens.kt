@@ -46,6 +46,7 @@ import com.chumi.gymapp.data.Meal
 import com.chumi.gymapp.data.MealIdea
 import com.chumi.gymapp.data.Nutrition
 import com.chumi.gymapp.data.NutritionContent
+import com.chumi.gymapp.data.formatKcal
 import com.chumi.gymapp.data.formatKg
 import com.chumi.gymapp.data.formatWeight
 import com.chumi.gymapp.ui.AppViewModel
@@ -234,9 +235,9 @@ fun NutritionProgressScreen(vm: AppViewModel, nav: NavHostController) {
                         )
                         StatTile(
                             "Gasto real estimado",
-                            coach.realTdee?.let { "${formatKg(it.toDouble())} kcal" } ?: "—",
+                            coach.realTdee?.let { "${formatKcal(it.toDouble())} kcal" } ?: "—",
                             Modifier.weight(1f),
-                            sub = targets?.let { "calculado: ${formatKg(it.tdee.toDouble())}" },
+                            sub = targets?.let { "calculado: ${formatKcal(it.tdee.toDouble())}" },
                         )
                     }
                     if (coach.realTdee == null) {
@@ -275,7 +276,7 @@ fun NutritionProgressScreen(vm: AppViewModel, nav: NavHostController) {
                 val protOk = targets?.let { t -> logged.values.count { it.protein >= t.protein * 0.9 } } ?: 0
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     StatTile("Días registrados", "${logged.size}/$range", Modifier.weight(1f))
-                    StatTile("Media kcal", if (logged.isEmpty()) "—" else formatKg(avgKcal), Modifier.weight(1f), sub = targets?.let { "obj. ${formatKg(it.kcal.toDouble())}" })
+                    StatTile("Media kcal", if (logged.isEmpty()) "—" else formatKcal(avgKcal), Modifier.weight(1f), sub = targets?.let { "obj. ${formatKcal(it.kcal.toDouble())}" })
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -294,7 +295,7 @@ fun NutritionProgressScreen(vm: AppViewModel, nav: NavHostController) {
                             val ld = LocalDate.ofEpochDay(d)
                             BarItem(if (range <= 7) dayLabelShort(ld) else ld.format(shortDate), totalsByDay[d]?.kcal ?: 0.0, ld.format(mediumDate))
                         },
-                        valueText = { "${formatKg(it)} kcal" },
+                        valueText = { "${formatKcal(it)} kcal" },
                         target = targets?.kcal?.toDouble(),
                         labelEvery = when (range) { 7 -> 1; 14 -> 2; else -> 7 },
                     )

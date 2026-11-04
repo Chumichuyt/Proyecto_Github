@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.chumi.gymapp.data.Comparisons
 import com.chumi.gymapp.data.Stats
+import com.chumi.gymapp.data.formatKcal
 import com.chumi.gymapp.data.formatKg
 import com.chumi.gymapp.data.formatWeight
 import com.chumi.gymapp.ui.AppViewModel
@@ -164,7 +165,7 @@ fun HomeScreen(vm: AppViewModel, nav: NavHostController) {
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     } else {
-                        Text("${formatKg(eaten.kcal)} / ${formatKg(t.kcal.toDouble())} kcal", style = MaterialTheme.typography.titleLarge)
+                        Text("${formatKcal(eaten.kcal)} / ${formatKcal(t.kcal.toDouble())} kcal", style = MaterialTheme.typography.titleLarge)
                         Spacer(Modifier.height(8.dp))
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             MacroBar("Prot.", eaten.protein, t.protein.toDouble(), colors.protein, Modifier.weight(1f))

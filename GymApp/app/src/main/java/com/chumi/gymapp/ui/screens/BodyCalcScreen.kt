@@ -136,9 +136,14 @@ fun BodyCalcScreen(vm: AppViewModel, nav: NavHostController) {
                     }
                     Spacer(Modifier.height(6.dp))
                     LabeledNumberField(
-                        "% grasa medido (opcional: báscula, plicómetro…)", p.bodyFatManual ?: 0.0,
+                        "% grasa medido (opcional)", p.bodyFatManual ?: 0.0,
                         { v -> vm.updateProfile { it.copy(bodyFatManual = v.takeIf { x -> x in 2.0..70.0 }) } },
                         Modifier.fillMaxWidth(), suffix = "%",
+                    )
+                    Text(
+                        "Si tienes báscula de bioimpedancia o te han medido con plicómetro, pon aquí el %.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(Modifier.height(12.dp))
                     if (bf != null && weight > 0) {

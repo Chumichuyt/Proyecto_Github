@@ -31,6 +31,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.chumi.gymapp.data.formatKcal
 import com.chumi.gymapp.data.formatKg
 import kotlin.math.roundToInt
 
@@ -69,7 +70,7 @@ fun CalorieRing(consumed: Double, target: Double?, modifier: Modifier = Modifier
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val remaining = target?.let { it - consumed }
             Text(
-                if (remaining == null) formatKg(consumed) else formatKg(kotlin.math.abs(remaining)),
+                if (remaining == null) formatKcal(consumed) else formatKcal(kotlin.math.abs(remaining)),
                 style = MaterialTheme.typography.headlineMedium,
             )
             Text(
