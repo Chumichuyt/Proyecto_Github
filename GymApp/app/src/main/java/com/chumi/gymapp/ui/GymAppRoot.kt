@@ -14,7 +14,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShowChart
-import androidx.compose.material.icons.filled.ViewList
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -40,7 +40,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.chumi.gymapp.ui.components.formatDuration
+import com.chumi.gymapp.ui.screens.AddFoodScreen
+import com.chumi.gymapp.ui.screens.BodyCalcScreen
 import com.chumi.gymapp.ui.screens.BodyScreen
+import com.chumi.gymapp.ui.screens.MealIdeasScreen
+import com.chumi.gymapp.ui.screens.NutritionProgressScreen
+import com.chumi.gymapp.ui.screens.NutritionScreen
+import com.chumi.gymapp.ui.screens.TipsScreen
 import com.chumi.gymapp.ui.screens.ExerciseDetailScreen
 import com.chumi.gymapp.ui.screens.ExercisesScreen
 import com.chumi.gymapp.ui.screens.HistoryScreen
@@ -64,6 +70,12 @@ object Routes {
     const val SETTINGS = "settings"
     const val BODY = "body"
     const val TOOLS = "tools"
+    const val NUTRITION = "nutrition"
+    const val BODY_CALC = "bodycalc"
+    const val TIPS = "tips"
+    const val NUTRITION_PROGRESS = "nutritionProgress"
+    fun addFood(day: Long, meal: com.chumi.gymapp.data.Meal) = "addFood/$day/${meal.name}"
+    fun ideas(day: Long) = "ideas/$day"
     fun routine(id: String) = "routine/$id"
     fun workoutDetail(id: String, justFinished: Boolean = false) = "workoutDetail/$id?finished=$justFinished"
     fun exercise(id: String) = "exercise/$id"
@@ -74,9 +86,9 @@ private data class Tab(val route: String, val label: String, val icon: ImageVect
 private val tabs = listOf(
     Tab(Routes.HOME, "Inicio", Icons.Default.Home),
     Tab(Routes.TRAIN, "Entrenar", Icons.Default.FitnessCenter),
-    Tab(Routes.HISTORY, "Historial", Icons.Default.History),
+    Tab(Routes.NUTRITION, "Nutrición", Icons.Default.Restaurant),
     Tab(Routes.PROGRESS, "Progreso", Icons.Default.ShowChart),
-    Tab(Routes.EXERCISES, "Ejercicios", Icons.Default.ViewList),
+    Tab(Routes.HISTORY, "Historial", Icons.Default.History),
 )
 
 fun NavHostController.navigateTab(route: String) = navigate(route) {
@@ -125,6 +137,18 @@ fun GymAppRoot(vm: AppViewModel) {
             composable(Routes.SETTINGS) { SettingsScreen(vm, nav) }
             composable(Routes.BODY) { BodyScreen(vm, nav) }
             composable(Routes.TOOLS) { ToolsScreen(vm, nav) }
+            composable(Routes.NUTRITION) { NutritionScreen(vm, nav) }
+            composable(Routes.BODY_CALC) { BodyCalcScreen(vm, nav) }
+            composable(Routes.TIPS) { TipsScreen(nav) }
+            composable(Routes.NUTRITION_PROGRESS) { NutritionProgressScreen(vm, nav) }
+            composable("addFood/{day}/{meal}") {
+                val day = it.arguments?.getString("day")?.toLongOrNull() ?: com.chumi.gymapp.data.Nutrition.today()
+                val meal = runCatching { com.chumi.gymapp.data.Meal.valueOf(it.arguments?.getString("meal") ?: "") }.getOrDefault(com.chumi.gymapp.data.Meal.LUNCH)
+                AddFoodScreen(vm, nav, day, meal)
+            }
+            composable("ideas/{day}") {
+                MealIdeasScreen(vm, nav, it.arguments?.getString("day")?.toLongOrNull() ?: com.chumi.gymapp.data.Nutrition.today())
+            }
             composable("routine/{id}") { RoutineEditScreen(vm, nav, it.arguments?.getString("id") ?: "new") }
             composable("exercise/{id}") { ExerciseDetailScreen(vm, nav, it.arguments?.getString("id") ?: "") }
             composable("workoutDetail/{id}?finished={finished}") {

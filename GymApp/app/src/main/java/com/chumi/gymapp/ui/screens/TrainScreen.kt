@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -28,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,6 +64,11 @@ fun TrainScreen(vm: AppViewModel, nav: NavHostController) {
     AppScaffold(
         title = "Entrenar",
         isTab = true,
+        actions = {
+            TextButton(onClick = { nav.navigate(Routes.EXERCISES) }) {
+                Icon(Icons.Default.ViewList, null); Spacer(Modifier.width(4.dp)); Text("Ejercicios")
+            }
+        },
         fab = {
             ExtendedFloatingActionButton(
                 onClick = { nav.navigate(Routes.routine("new")) },

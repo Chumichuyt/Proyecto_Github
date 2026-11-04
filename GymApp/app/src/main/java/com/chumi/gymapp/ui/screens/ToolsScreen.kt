@@ -1,6 +1,7 @@
 package com.chumi.gymapp.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,18 @@ fun ToolsScreen(vm: AppViewModel, nav: NavHostController) {
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = pad.calculateTopPadding() + 4.dp, bottom = pad.calculateBottomPadding() + 24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            item {
+                SectionCard(
+                    modifier = Modifier.clickable { nav.navigate(com.chumi.gymapp.ui.Routes.BODY_CALC) },
+                    title = "📐 Calculadora corporal",
+                ) {
+                    Text(
+                        "IMC, peso saludable, % de grasa, masa magra, FFMI, metabolismo basal, gasto diario y tus calorías y macros.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
             item { SectionCard(title = "🐯 ¿A qué equivale este peso?") { WeightComparator() } }
             item { SectionCard(title = "Calculadora de 1RM") { OneRepMaxCalculator() } }
             item { SectionCard(title = "Calculadora de discos") { PlateCalculator(data.settings.barWeight) } }

@@ -19,6 +19,20 @@ App nativa (Kotlin + Jetpack Compose, Material 3) pensada para el Google Pixel 9
 - **Historial** por meses con detalle de cada entreno, valoración de cómo te sentiste y compartir el resumen.
 - **Gráficos**: volumen / entrenos / series por semana, calendario de días entrenados, series por grupo
   muscular, evolución de cada ejercicio (1RM, peso máximo, volumen, reps) y del peso corporal.
+- **Nutrición** (pestaña propia):
+  - Diario de comidas por día (desayuno, comida, merienda, cena, pre y post-entreno) con anillo de calorías
+    y barras de proteína, carbohidratos, grasas y fibra frente a tu objetivo.
+  - Base de ~130 alimentos habituales en España (valores por 100 g), alimentos propios, "añadir rápido",
+    recientes, raciones rápidas, copiar el día anterior y contador de agua.
+  - **Mi cuerpo y objetivos**: guarda altura, peso, edad y medidas y calcula IMC con escala de colores,
+    peso saludable, % de grasa (fórmula Navy o medido), masa magra, FFMI, índice cintura-altura,
+    metabolismo basal (Mifflin-St Jeor / Katch-McArdle), gasto diario y tus calorías y macros según el
+    objetivo (perder grasa, recomposición, mantener, ganar músculo) y el ritmo.
+  - **Coach nutricional**: compara la tendencia real de tu peso con el ritmo buscado, estima tu gasto
+    calórico real a partir de lo que comes y te propone ajustes de calorías.
+  - Gráficos de calorías y proteína por día con línea de objetivo y estadísticas de adherencia.
+  - 22 ideas de comidas con ingredientes, preparación y macros (se añaden al diario con un toque) y
+    más de 30 consejos de nutrición deportiva (proteína, timing, suplementos, mitos…).
 - **Peso y medidas**: peso, % grasa, cintura, pecho, brazo, muslo, con gráficos.
 - **Biblioteca** de ~80 ejercicios por grupo muscular + ejercicios personalizados (peso, peso corporal o cardio).
 - **Herramientas**: calculadora de 1RM con tabla de porcentajes, calculadora de discos por lado y

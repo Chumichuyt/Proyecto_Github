@@ -23,6 +23,14 @@ import com.chumi.gymapp.data.Workout
 import com.chumi.gymapp.data.WorkoutExercise
 import com.chumi.gymapp.data.WorkoutSet
 import com.chumi.gymapp.data.newId
+import com.chumi.gymapp.data.Food
+import com.chumi.gymapp.data.FoodDatabase
+import com.chumi.gymapp.data.FoodEntry
+import com.chumi.gymapp.data.Meal
+import com.chumi.gymapp.data.MealIdea
+import com.chumi.gymapp.data.Nutrition
+import com.chumi.gymapp.data.Profile
+import com.chumi.gymapp.data.macrosFor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -231,6 +239,82 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
 
     fun addBodyEntry(e: BodyEntry) = repo.update { d -> d.copy(body = (d.body.filterNot { it.id == e.id } + e).sortedBy { it.date }) }
     fun deleteBodyEntry(id: String) = repo.update { d -> d.copy(body = d.body.filterNot { it.id == id }) }
+
+    // ---------------- Nutrición ----------------
+
+    fun updateProfile(transform: (Profile) -> Profile) = repo.update { it.copy(profile = transform(it.profile)) }
+
+    /** Guarda el peso de hoy (si ya hay registro hoy, lo sustituye). */
+    fun setTodayWeight(kg: Double) = repo.update { d ->
+        if (kg <= 0) return@update d
+        val today = java.time.LocalDate.now()
+        val existing = d.body.find { Stats.toDate(it.date) == today }
+        val entry = existing?.copy(weight = kg) ?: BodyEntry(weight = kg)
+        d.copy(body = (d.body.filterNot { it.id == entry.id } + entry).sortedBy { it.date })
+    }
+
+    fun addFood(day: Long, meal: Meal, food: Food, grams: Double) = repo.update { d ->
+        val m = food.macrosFor(grams)
+        d.copy(foodLog = d.foodLog + FoodEntry(
+            day = day, meal = meal, foodId = food.id, name = food.name, grams = grams,
+            kcal = m.kcal, protein = m.protein, carbs = m.carbs, fat = m.fat, fiber = m.fiber,
+        ))
+    }
+
+    fun addQuick(day: Long, meal: Meal, name: String, kcal: Double, protein: Double, carbs: Double, fat: Double) = repo.update { d ->
+        d.copy(foodLog = d.foodLog + FoodEntry(
+            day = day, meal = meal, name = name.ifBlank { "Añadido rápido" }, grams = 0.0,
+            kcal = kcal, protein = protein, carbs = carbs, fat = fat,
+        ))
+    }
+
+    fun addIdea(day: Long, meal: Meal, idea: MealIdea) = repo.update { d ->
+        val entries = idea.ingredients.mapNotNull { (id, g) ->
+            val f = FoodDatabase.byId(id) ?: return@mapNotNull null
+            val m = f.macrosFor(g)
+            FoodEntry(day = day, meal = meal, foodId = f.id, name = f.name, grams = g,
+                kcal = m.kcal, protein = m.protein, carbs = m.carbs, fat = m.fat, fiber = m.fiber)
+        }
+        d.copy(foodLog = d.foodLog + entries)
+    }
+
+    fun updateEntryGrams(id: String, grams: Double) = repo.update { d ->
+        d.copy(foodLog = d.foodLog.map { e ->
+            if (e.id != id) return@map e
+            val f = Nutrition.findFood(d, e.foodId)
+            if (f != null) {
+                val m = f.macrosFor(grams)
+                e.copy(grams = grams, kcal = m.kcal, protein = m.protein, carbs = m.carbs, fat = m.fat, fiber = m.fiber)
+            } else if (e.grams > 0) {
+                val k = grams / e.grams
+                e.copy(grams = grams, kcal = e.kcal * k, protein = e.protein * k, carbs = e.carbs * k, fat = e.fat * k, fiber = e.fiber * k)
+            } else e
+        })
+    }
+
+    fun moveEntry(id: String, meal: Meal) = repo.update { d -> d.copy(foodLog = d.foodLog.map { if (it.id == id) it.copy(meal = meal) else it }) }
+
+    fun deleteEntry(id: String) = repo.update { d -> d.copy(foodLog = d.foodLog.filterNot { it.id == id }) }
+
+    /** Copia las comidas de un día (o solo una comida) a otro día. */
+    fun copyMeals(fromDay: Long, toDay: Long, meal: Meal? = null) = repo.update { d ->
+        val src = d.foodLog.filter { it.day == fromDay && (meal == null || it.meal == meal) }
+        d.copy(foodLog = d.foodLog + src.map { it.copy(id = newId(), day = toDay, createdAt = System.currentTimeMillis()) })
+    }
+
+    fun saveCustomFood(f: Food) = repo.update { d ->
+        val exists = d.customFoods.any { it.id == f.id }
+        d.copy(customFoods = if (exists) d.customFoods.map { if (it.id == f.id) f else it } else d.customFoods + f)
+    }
+
+    fun deleteCustomFood(id: String) = repo.update { d -> d.copy(customFoods = d.customFoods.filterNot { it.id == id }) }
+
+    fun addWater(day: Long, ml: Int) = repo.update { d ->
+        val now = ((d.water[day] ?: 0) + ml).coerceAtLeast(0)
+        d.copy(water = d.water + (day to now))
+    }
+
+    fun applyCalorieAdjust(delta: Int) = updateProfile { it.copy(calorieAdjust = it.calorieAdjust + delta) }
 
     // ---------------- Temporizador de descanso ----------------
 

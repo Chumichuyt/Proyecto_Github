@@ -38,6 +38,10 @@ import com.chumi.gymapp.data.formatKg
 import com.chumi.gymapp.data.formatWeight
 import com.chumi.gymapp.ui.AppViewModel
 import com.chumi.gymapp.ui.Routes
+import com.chumi.gymapp.ui.navigateTab
+import com.chumi.gymapp.data.Nutrition
+import com.chumi.gymapp.ui.components.MacroBar
+import com.chumi.gymapp.ui.components.macroColors
 import com.chumi.gymapp.ui.components.AppScaffold
 import com.chumi.gymapp.ui.components.ComparisonCard
 import com.chumi.gymapp.ui.components.SectionCard
@@ -140,6 +144,33 @@ fun HomeScreen(vm: AppViewModel, nav: NavHostController) {
                     if (weekCount >= goal) {
                         Spacer(Modifier.height(8.dp))
                         Text("🏆 ¡Objetivo de la semana cumplido!", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+
+            item {
+                val t = Nutrition.targets(data)
+                val eaten = Nutrition.dayTotals(data, Nutrition.today())
+                val colors = macroColors()
+                SectionCard(
+                    modifier = Modifier.clickable { nav.navigateTab(Routes.NUTRITION) },
+                    title = "Nutrición de hoy",
+                    action = { Icon(Icons.Default.ChevronRight, null) },
+                ) {
+                    if (t == null) {
+                        Text(
+                            "Configura tu altura, peso y objetivo y te calculo calorías y macros, IMC y % de grasa.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    } else {
+                        Text("${formatKg(eaten.kcal)} / ${formatKg(t.kcal.toDouble())} kcal", style = MaterialTheme.typography.titleLarge)
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            MacroBar("Prot.", eaten.protein, t.protein.toDouble(), colors.protein, Modifier.weight(1f))
+                            MacroBar("Carb.", eaten.carbs, t.carbs.toDouble(), colors.carbs, Modifier.weight(1f))
+                            MacroBar("Grasa", eaten.fat, t.fat.toDouble(), colors.fat, Modifier.weight(1f))
+                        }
                     }
                 }
             }

@@ -31,6 +31,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -222,6 +223,8 @@ fun BarChart(
     valueText: (Double) -> String = { axisLabel(it) },
     height: Int = 180,
     labelEvery: Int = 1,
+    target: Double? = null,
+    targetLabel: String = "Objetivo",
 ) {
     if (bars.isEmpty()) {
         EmptyChart(modifier, height); return
@@ -243,7 +246,7 @@ fun BarChart(
             )
         }
         Spacer(Modifier.height(8.dp))
-        val maxV = bars.maxOf { it.value }.coerceAtLeast(1.0)
+        val maxV = maxOf(bars.maxOf { it.value }, target ?: 0.0).coerceAtLeast(1.0)
         val step = niceStep(maxV, 4)
         val top = ceil(maxV / step) * step
 
@@ -284,6 +287,7 @@ fun BarChart(
             }
             val slot = w / bars.size
             val gap = 2.dp.toPx().coerceAtLeast(slot * 0.2f)
+            val targetY = target?.let { yOf(it) }
             val barW = slot - gap
             val r = 4.dp.toPx().coerceAtMost(barW / 2)
             bars.forEachIndexed { i, b ->
@@ -300,6 +304,15 @@ fun BarChart(
                     val lbl = measurer.measure(b.label, labelStyle)
                     if (i % labelEvery == 0) drawText(lbl, topLeft = Offset(x + barW / 2 - lbl.size.width / 2, size.height - lbl.size.height))
                 }
+            }
+            if (targetY != null) {
+                drawLine(
+                    axisColor, Offset(leftPad, targetY), Offset(size.width, targetY),
+                    strokeWidth = 1.5.dp.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(), 5.dp.toPx())),
+                )
+                val tl = measurer.measure(targetLabel, labelStyle)
+                drawText(tl, topLeft = Offset(size.width - tl.size.width, targetY - tl.size.height - 2.dp.toPx()))
             }
         }
     }

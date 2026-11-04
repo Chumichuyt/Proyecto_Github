@@ -76,13 +76,13 @@ fun ExercisesScreen(vm: AppViewModel, nav: NavHostController) {
 
     AppScaffold(
         title = "Ejercicios (${data.exercises.size})",
-        isTab = true,
+        onBack = { nav.popBackStack() },
         fab = {
             ExtendedFloatingActionButton(onClick = { creating = true }, icon = { Icon(Icons.Default.Add, null) }, text = { Text("Nuevo") })
         },
     ) { pad ->
         LazyColumn(
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = pad.calculateTopPadding() + 4.dp, bottom = 96.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = pad.calculateTopPadding() + 4.dp, bottom = pad.calculateBottomPadding() + 96.dp),
         ) {
             item {
                 OutlinedTextField(
